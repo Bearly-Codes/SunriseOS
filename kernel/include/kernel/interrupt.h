@@ -1,0 +1,1 @@
+void excp_dispatcher(int num, int *stk);

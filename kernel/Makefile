@@ -28,6 +28,16 @@ LDFLAGS:=$(LDFLAGS) $(KERNEL_ARCH_LDFLAGS)
 LIBS:=$(LIBS) $(KERNEL_ARCH_LIBS)
 
 KERNEL_SRCS := $(wildcard kernel/*.c)
+
+# Get all the Arch-specific source files
+ARCH_SRCS_C := $(wildcard arch/$(HOSTARCH)/*.c)
+ARCH_SRCS_S := $(filter-out $(ARCHDIR)/crti.S $(ARCHDIR)/crtn.S, $(wildcard arch/$(HOSTARCH)/*.S))
+
+KERNEL_ARCH_OBJS := $(ARCH_SRCS_C:.c=.o) $(ARCH_SRCS_S:.S=.o)
+
+# Filter out crtbegin and crtend
+KERNEL_ARCH_OBJS := $(filter-out $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o, $(KERNEL_ARCH_OBJS))
+
 KERNEL_OBJS := $(KERNEL_ARCH_OBJS) $(KERNEL_SRCS:.c=.o)
 
 OBJS=\
