@@ -21,7 +21,7 @@ static inline void idt_load(const idt_ptr_t *idt_ptr) {
 }
 
 void idt_init(void) {
-    const uint16_t KERNEL_CS = 0x08; // Kernel code segment selector
+    const uint16_t KERNEL_CS = 0x10; // Kernel code segment selector TODO grab from CS register
     const uint8_t  KERNEL_INT = 0x8E; // Interrupt gate
     
     memset(idt, 0, sizeof(idt));

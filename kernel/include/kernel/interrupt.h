@@ -1,1 +1,1 @@
-void excp_dispatcher(int num, int *stk);
+void excp_dispatcher(uint32_t num, uint32_t err_code);

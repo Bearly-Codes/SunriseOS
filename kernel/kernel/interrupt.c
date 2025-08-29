@@ -3,27 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-
-void excp_dispatcher(uint32_t num, uint32_t *stk) {
-    
-    // Currently ignoring hardware interrupts
-    if (num < CPU_EXCP) {
-        
-
-        printf("Trap %d\n", num);
-        if (num < TRAPS) {
-            printf("%s\n", trap_names[num]);
-        }
-
-        while(1) {
-            __asm__ volatile("hlt");
-        }
-    }
-}
-
-
-char *trap_names[TRAPS] =
-{
+char *trap_names[TRAPS] = {
     "divide by zero",
     "debug exception",
     "non-maskable interrupt",
@@ -44,4 +24,24 @@ char *trap_names[TRAPS] =
     "alignment check",
     "machine check",
 };
+
+void excp_dispatcher(uint32_t num, uint32_t err_code) {
+    
+    // Currently ignoring hardware interrupts
+    if (num < CPU_EXCP) {
+        printf("Trap %d\n", num);
+        if (num < TRAPS) {
+            printf("%s\n", trap_names[num]);
+        }
+
+        while(1) {
+            __asm__ volatile("hlt");
+        }
+    } else {
+        printf("CPU Exception %d\n", num);
+        while(1) {
+            __asm__ volatile("hlt");
+        }
+    }
+}
 

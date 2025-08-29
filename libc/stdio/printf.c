@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 static bool print(const char* data, size_t length) {
 	const unsigned char* bytes = (const unsigned char*) data;
@@ -61,6 +62,33 @@ int printf(const char* restrict format, ...) {
 			if (!print(str, len))
 				return -1;
 			written += len;
+		} else if (*format == 'd') {
+			format++;
+			int val = va_arg(parameters, int);
+			char buf[12]; // sized for 32-bit int including negative
+			uint32_t u_val = (uint32_t)(val < 0 ? -val : val);
+			char *end = buf + sizeof(buf);
+			char *p = end;
+
+			// Fill buffer right to left, print from p
+			do {
+				*--p = (char)('0' + (u_val % 10));
+				u_val /= 10;
+			} while (u_val);
+
+			if (val < 0) {
+				*--p = '-';
+			}
+
+			size_t len = (size_t)(end - p);
+			if (maxrem < len) {
+				// TODO: Set errno to EOVERFLOW.
+				return -1;
+			}
+			if (!print(p, len))
+				return -1;
+			written += len;
+
 		} else {
 			format = format_begun_at;
 			size_t len = strlen(format);
