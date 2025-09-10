@@ -25,6 +25,12 @@ char *trap_names[TRAPS] = {
     "machine check",
 };
 
+/*
+  Pass a pointer to a struct that mirrors the pushed data here. Can add to it easily.
+  REMEMBER IT MUST BE DIVISIBLE BY 8 (32 BITS)
+*/
+
+
 void excp_dispatcher(uint32_t num, uint32_t err_code) {
     
     // Currently ignoring hardware interrupts

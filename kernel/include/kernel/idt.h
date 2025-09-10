@@ -7,8 +7,6 @@ typedef struct  {
     uint8_t zero; // Reserved, must be zero
     uint8_t type_attr;  // Gate type, dpl, and p
     uint16_t offset_2; // Handler [31:16]
-
-
 } __attribute__((packed)) idt_entry_32_t;
 
 typedef struct {

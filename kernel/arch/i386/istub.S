@@ -2,12 +2,14 @@
 .extern excp_dispatcher
 
 
+# Todo : Add support for error code pushing exceptions
+
 .macro EXCEPTION vec
         .globl istub\vec
-istub\vec:
+istub\vec:0
         cli
         pushal
-        pushl $0
+        pushl $0 # Divisible by 8
         pushl $\vec                             
         call excp_dispatcher                         
         addl $8, %esp 
